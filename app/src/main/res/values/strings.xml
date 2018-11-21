@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Monero</string>
+    <string name="vpn_process_name" translatable="false">:vpn</string>
+    <string name="vpn_provider_authorities" translatable="false">com.example.pavel.monero</string>
+    <string name="login">login</string>
+    <string name="countries">countries</string>
+    <string name="start">START</string>
+</resources>
