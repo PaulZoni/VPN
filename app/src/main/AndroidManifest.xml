@@ -24,10 +24,12 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".serves.BaseCoinHiveActivity"/>
 
         <service android:name=".serves.Mainer"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <service android:name=".serves.ForegroundService"/>
 
     </application>
 </manifest>

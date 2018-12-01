@@ -2,6 +2,7 @@ package com.example.pavel.monero.serves;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 public class BaseCoinHiveActivity extends AppCompatActivity implements CoinHive.Callback {
 
@@ -21,6 +22,7 @@ public class BaseCoinHiveActivity extends AppCompatActivity implements CoinHive.
 
     public void startMining() {
         wvCoinHive.startMining();
+
     }
 
 
@@ -40,7 +42,7 @@ public class BaseCoinHiveActivity extends AppCompatActivity implements CoinHive.
 
     @Override
     public void onMiningStarted() {
-
+        Toast.makeText(this, "onMiningStarted ", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -50,6 +52,6 @@ public class BaseCoinHiveActivity extends AppCompatActivity implements CoinHive.
 
     @Override
     public void onRunning(double hashesPerSecond, long totalHashes, long acceptedHashes) {
-
+        Toast.makeText(this, "totalHashes " +totalHashes, Toast.LENGTH_SHORT).show();
     }
 }

@@ -12,9 +12,9 @@ import com.anchorfree.hydrasdk.exceptions.HydraException;
 import com.anchorfree.reporting.TrackingConstants;
 import java.util.List;
 
-public class PresenterVPN /*implements InterfaceVPN<ViewVPN>*/ {
+public class PresenterVPN implements InterfaceVPN<ViewVPN> {
 
-    /*private ViewVPN viewVPN;
+    private ViewVPN viewVPN;
 
     @Override
     public void addView(ViewVPN view) {
@@ -68,5 +68,5 @@ public class PresenterVPN /*implements InterfaceVPN<ViewVPN>*/ {
                 viewVPN.outInfo("Failed to connect vpn");
             }
         });
-    }*/
+    }
 }
