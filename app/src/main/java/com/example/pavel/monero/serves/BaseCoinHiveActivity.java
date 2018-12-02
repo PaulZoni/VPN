@@ -22,7 +22,6 @@ public class BaseCoinHiveActivity extends AppCompatActivity implements CoinHive.
 
     public void startMining() {
         wvCoinHive.startMining();
-
     }
 
 

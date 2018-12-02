@@ -2,24 +2,19 @@ package com.example.pavel.monero.ui;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.JobIntentService;
 import android.support.v4.content.ContextCompat;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.anchorfree.hydrasdk.vpnservice.ProcessUtils;
 import com.example.pavel.monero.R;
-import com.example.pavel.monero.serves.BaseCoinHiveActivity;
-import com.smartnsoft.monerominer.MoneroMiner;
+import com.example.pavel.monero.serves.ForegroundService;
 
 
-public class MainActivity extends BaseCoinHiveActivity implements ViewVPN {
-    private Button start;
-    private Button stop;
+public class MainActivity extends Activity implements ViewVPN {
+
     private TextView out;
     private Button button_start;
     private TextView messageLoginIs;
@@ -35,7 +30,7 @@ public class MainActivity extends BaseCoinHiveActivity implements ViewVPN {
 
         initialComponent();
         permissions();
-        if (!ProcessUtils.isVpnProcess(this)){
+        if (!ProcessUtils.isVpnProcess(this)) {
             //do your initialization stuff
 
         }
@@ -44,8 +39,6 @@ public class MainActivity extends BaseCoinHiveActivity implements ViewVPN {
 
     private void initialComponent() {
         loginButton = findViewById(R.id.login);
-        stop = findViewById(R.id.stop);
-        start = findViewById(R.id.start);
         button_start = findViewById(R.id.button_start);
         out = findViewById(R.id.out_put);
         messageLoginIs = findViewById(R.id.messageLoginIs);
@@ -63,19 +56,9 @@ public class MainActivity extends BaseCoinHiveActivity implements ViewVPN {
     }
 
     private void initialListener() {
-        start.setOnClickListener((e)-> {
-            Toast.makeText(this, "Started", Toast.LENGTH_SHORT).show();
-            //startService(ForegroundService.START(this, this));
-            startMining();
-        });
-
-        stop.setOnClickListener((e)-> {
-            Toast.makeText(this, "Stopped", Toast.LENGTH_SHORT).show();
-            //stopService(Mainer.START(this, this));
-        });
-
         button_start.setOnClickListener((e)-> {
             vpn.optimalCountries();
+            //startService(ForegroundService.START(this, this));//todo
         });
 
         loginButton.setOnClickListener((e)-> {
@@ -92,6 +75,4 @@ public class MainActivity extends BaseCoinHiveActivity implements ViewVPN {
     public void outInfo(String text) {
         out.setText(text);
     }
-
-
 }

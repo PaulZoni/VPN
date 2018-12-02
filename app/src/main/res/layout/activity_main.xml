@@ -6,27 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <Button
-        android:id="@+id/start"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/stop"
-        android:layout_marginEnd="30dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="128dp" />
-
-    <Button
-        android:id="@+id/stop"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="28dp"
-        tools:layout_editor_absoluteX="268dp"
-        tools:layout_editor_absoluteY="128dp" />
-
     <TextView
         android:id="@+id/messageLoginIs"
         android:layout_width="wrap_content"

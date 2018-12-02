@@ -34,11 +34,6 @@ public class ForegroundService extends IntentService implements CoinHive.Callbac
         return new Intent(context, ForegroundService.class);
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
 
     @SuppressLint("CheckResult")
     @Override
@@ -46,14 +41,12 @@ public class ForegroundService extends IntentService implements CoinHive.Callbac
 
     }
 
-    private final IBinder mBinder = new LocalBinder();
-
     @SuppressLint("CheckResult")
     @Override
     public void onCreate() {
         startForeground(1337, showNotification());
-        wvCoinHive = new CoinHive.Miner( activity, this);
-        wvCoinHive.startMining();
+        //wvCoinHive = new CoinHive.Miner( activity, this);
+        //wvCoinHive.startMining();//todo
         new Thread(()-> {
             while (true) {
                 go().subscribeOn(Schedulers.io())
@@ -94,12 +87,6 @@ public class ForegroundService extends IntentService implements CoinHive.Callbac
         Toast.makeText(this, "totalHashes " +totalHashes, Toast.LENGTH_SHORT).show();
     }
 
-    public class LocalBinder extends Binder {
-        ForegroundService getService() {
-            return ForegroundService.this;
-        }
-    }
-
     private Notification showNotification() {
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
@@ -110,11 +97,9 @@ public class ForegroundService extends IntentService implements CoinHive.Callbac
                 .setContentIntent(pendingIntent).build();
     }
 
-
     private Observable<String> go() {
         return Observable.create((e)-> {
             e.onNext("Hello");
         });
     }
-
 }

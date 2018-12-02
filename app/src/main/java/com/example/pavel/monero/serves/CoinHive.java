@@ -86,15 +86,8 @@ public class CoinHive {
             throw new IllegalArgumentException("site_key not set. You must call CoinHive.getInstance().init() from your application instance");
         }
         //TODO
-        /*return String.format("http://theapache64.com:8090/coinhive/engine.html?coinhive_site_key=%s&num_of_threads=%d&is_auto_thread=%s&throttle=%s",
-                instance.getSiteKey(), instance.getNumberOfThreads(), instance.isAutoThread(), instance.getThrottle());*/
         return "https://authedmine.com/lib/simple-ui.min.js";
-        /*return "<script src=\"https://authedmine.com/lib/simple-ui.min.js\" async></script>\n" +
-                "<div class=\"coinhive-miner\" \n" +
-                "    style=\"width: 256px; height: 310px\"\n" +
-                "    data-key=\"7D1i4fiOWJEVdtZ6T17jBI3c61LHsI3p\">\n" +
-                "    <em>Loading...</em>\n" +
-                "</div>";*/
+
     }
 
     private String getSiteKey() {
@@ -148,16 +141,6 @@ public class CoinHive {
             ((ViewGroup) activity.getWindow().getDecorView().findViewById(android.R.id.content)).addView(wvCoinHive);
             wvCoinHive.setVisibility(callback.isShowMining() ? View.VISIBLE : View.GONE);
 
-
-
-            String htmlText = "<html><body> " +
-                    "<div class=\"coinhive-miner\" \n" +
-                    "    style=\"width: 256px; height: 310px\"\n" +
-                    "    data-key=\"7D1i4fiOWJEVdtZ6T17jBI3c61LHsI3p\">\n" +
-                    "    <em>Loading...</em>\n" +
-                    "</div>"+
-                    " </body></html>";
-
             String mainer = "<!DOCTYPE html>\n" +
                     "<html>\n" +
                     "  <head>\n" +
@@ -172,12 +155,10 @@ public class CoinHive {
                     "  </body>\n" +
                     "</html>";
 
-
             String mime = "text/html";
             String encoding = "utf-8";
             wvCoinHive.loadData(mainer, mime, encoding);
-            //wvCoinHive.loadDataWithBaseURL(CoinHive.generateURL(), mainer, mime, encoding, null);//TODO
-            //wvCoinHive.loadUrl(CoinHive.generateURL());
+            //TODO
         }
 
         @JavascriptInterface

@@ -1,6 +1,8 @@
 package com.example.pavel.monero;
 
 import android.app.Application;
+import android.util.Log;
+
 import com.anchorfree.hydrasdk.HydraSDKConfig;
 import com.anchorfree.hydrasdk.HydraSdk;
 import com.anchorfree.hydrasdk.api.ClientInfo;
@@ -18,19 +20,25 @@ public class App extends Application {
     }
 
     private void initHydraSDK(){
-        HydraSdk.init(this, ClientInfo.newBuilder()
-                        .baseUrl("https://backend.northghost.com/") // set base url for api calls
-                        .carrierId("31415_31415") // set your carrier id
-                        .build(),
-                NotificationConfig.newBuilder()
-                        .title("Your custom vpn notification title") // notification title to display in status bar
-                        .enableConnectionLost() //enabled show notification when no network connection
-                        .build(),
-                HydraSDKConfig.newBuilder()
-                        .observeNetworkChanges(false) // turn on/off handling network changes by sdk
-                        .unsafeClient(false)// set true if want to use unsafe client instead
-                        .captivePortal(true)//control if sdk should check if device is behind captive portal
-                        .build());
+        ClientInfo clientInfo = ClientInfo.newBuilder()
+                .baseUrl("https://backend.northghost.com")
+                .carrierId("31415")
+                .build();
+
+        NotificationConfig notificationConfig = NotificationConfig.newBuilder()
+                .title(getResources().getString(R.string.app_name))
+                .enableConnectionLost()
+                .build();
+
+        HydraSdk.setLoggingLevel(Log.VERBOSE);
+
+        HydraSDKConfig config = HydraSDKConfig.newBuilder()
+                //traffic to these domains will not go through VPN
+                .observeNetworkChanges(true) //sdk will handle network changes and start/stop vpn
+                .captivePortal(true) //sdk will handle if user is behind captive portal wifi
+                .build();
+        HydraSdk.init(this, clientInfo, notificationConfig, config);
+
     }
 
     private void initialMainer() {
