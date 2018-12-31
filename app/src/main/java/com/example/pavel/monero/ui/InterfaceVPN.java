@@ -5,4 +5,7 @@ public interface InterfaceVPN <T> {
     void listAvailableCountries();
     void authentication();
     void optimalCountries();
+    void checkCountryStart();
+    void saveCountryState(String country);
+    void reloadVpn(String country);
 }

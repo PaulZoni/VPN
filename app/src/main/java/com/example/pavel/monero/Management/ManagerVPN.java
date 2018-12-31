@@ -8,11 +8,25 @@ import com.anchorfree.hydrasdk.api.data.Country;
 import com.anchorfree.hydrasdk.api.data.ServerCredentials;
 import com.anchorfree.hydrasdk.api.response.User;
 import com.anchorfree.hydrasdk.callbacks.Callback;
+import com.anchorfree.hydrasdk.callbacks.CompletableCallback;
 import com.anchorfree.hydrasdk.exceptions.HydraException;
 import com.anchorfree.reporting.TrackingConstants;
 import java.util.List;
 
 public class ManagerVPN implements IManagementVPN {
+
+    private static ManagerVPN managerVPN;
+    public static String VPN_CONNECTED = "VPN connected";
+
+    private ManagerVPN() {
+
+    }
+
+    public static ManagerVPN createManager() {
+        if (managerVPN == null) managerVPN = new ManagerVPN();
+        return managerVPN;
+    }
+
 
     @Override
     public void getListAvailableCountries(CallbackCountry callback) {
@@ -48,6 +62,21 @@ public class ManagerVPN implements IManagementVPN {
         startVpnWithSettings(country, callback);
     }
 
+    @Override
+    public void stopVPN(CallbackStop callbackStop) {
+        HydraSdk.stopVPN(TrackingConstants.GprReasons.M_UI, new CompletableCallback() {
+            @Override
+            public void complete() {
+                callbackStop.stopVpn(true);
+            }
+
+            @Override
+            public void error(HydraException e) {
+                callbackStop.stopVpn(false);
+            }
+        });
+    }
+
     private void startVpnWithSettings(String country, CallbackStartResult callback) {
         HydraSdk.startVPN(new SessionConfig.Builder()
                 .withVirtualLocation(country)
@@ -55,7 +84,7 @@ public class ManagerVPN implements IManagementVPN {
                 .build(), new Callback<ServerCredentials>() {
             @Override
             public void success(@NonNull ServerCredentials serverCredentials) {
-                callback.getStartResult("VPN connected");
+                callback.getStartResult(VPN_CONNECTED);
             }
 
             @Override
