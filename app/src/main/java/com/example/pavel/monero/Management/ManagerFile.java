@@ -20,19 +20,16 @@ public class ManagerFile implements IManagementFile {
 
     @Override
     public Observable<Boolean> saveSelect(Integer type, String FILENAME) {
-        //return  observe(() -> saveString(context, String.valueOf(type), FILENAME));
         return Observable.create((s) -> s.onNext(saveString(context, String.valueOf(type), FILENAME)));
     }
 
     @Override
     public Observable<Boolean> saveSelect(String type, String FILENAME) {
-        //return observe(() -> saveString(context, type, FILENAME));
         return Observable.create((s) -> s.onNext(saveString(context, type, FILENAME)));
     }
 
     @Override
     public Observable <String>readSelect(String FILENAME, int type) {
-        //return observe(() -> loadString(context, FILENAME));
         return Observable.create((s) -> s.onNext(loadString(context, FILENAME)));
     }
 

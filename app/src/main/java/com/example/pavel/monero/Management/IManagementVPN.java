@@ -23,8 +23,18 @@ public interface IManagementVPN {
         void stopVpn(boolean success);
     }
 
+    interface CallbackTraffic {
+        void getTraffic(long tx, long rx);
+    }
+
+    interface CallbackRemoveTraffic {
+        void removeResult(long l, long l1);
+    }
+
     void getListAvailableCountries(CallbackCountry callback);
     void doAuthentication(CallbackAuthentication callback);
     void startWithCountries(String country, CallbackStartResult callback);
     void stopVPN(CallbackStop callbackStop);
+    void vpnTraffic(CallbackTraffic callbackTraffic);
+    void stopTraffic(CallbackRemoveTraffic callbackRemoveTraffic);
 }

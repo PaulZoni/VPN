@@ -4,8 +4,8 @@
     <item>
         <shape>
             <corners android:radius="50dp" />
-            <stroke android:color="#9575CD" android:width="1dp" />
-            <solid android:color="#B39DDB" />
+            <stroke android:color="#78909C" android:width="1dp" />
+            <solid android:color="#B0BEC5" />
         </shape>
     </item>
 </layer-list>

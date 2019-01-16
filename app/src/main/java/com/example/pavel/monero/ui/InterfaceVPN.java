@@ -8,4 +8,6 @@ public interface InterfaceVPN <T> {
     void checkCountryStart();
     void saveCountryState(String country);
     void reloadVpn(String country);
+    boolean isVpnIsStart();
+    void stopVpn();
 }

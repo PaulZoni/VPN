@@ -10,12 +10,13 @@ import com.example.pavel.monero.utils.Constants;
 
 public class PresenterVPN implements InterfaceVPN<ViewVPN> {
 
-    private final String          FILENAME = "Countries.txt";
-    private String                         countryStart = "";
-    private boolean                          loginIs = false;
-    private ViewVPN viewVPN;
-    private IManagementVPN managerVpn;
-    private IManagementFile managementFile;
+    private final String    FILENAME = "Countries.txt";
+    private String                   countryStart = "";
+    private boolean                    loginIs = false;
+    private boolean                 vpnIsStart = false;
+    private ViewVPN                            viewVPN;
+    private IManagementVPN                  managerVpn;
+    private IManagementFile             managementFile;
 
     public PresenterVPN (IManagementFile managementFile) {
         this.managementFile = managementFile;
@@ -35,7 +36,7 @@ public class PresenterVPN implements InterfaceVPN<ViewVPN> {
 
     @Override
     public void authentication() {
-        managerVpn.doAuthentication((String resultAuthentication)-> {
+        managerVpn.doAuthentication((String resultAuthentication) -> {
             loginIs = resultAuthentication.equals("Logged in successfully");
             viewVPN.messageLoginIs(resultAuthentication);
         });
@@ -43,7 +44,15 @@ public class PresenterVPN implements InterfaceVPN<ViewVPN> {
 
     @Override
     public void optimalCountries() {
-        managerVpn.startWithCountries(countryStart, this::checkStartResult);
+        if (loginIs) {
+            viewVPN.startLoader();
+            managerVpn.startWithCountries(countryStart, this::checkStartResult);
+        } else {
+            viewVPN.showMessageErrorListCountries();
+            viewVPN.changeTextOnButtonStart("START");
+            vpnIsStart = false;
+            showStopTraffic();
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -68,18 +77,60 @@ public class PresenterVPN implements InterfaceVPN<ViewVPN> {
 
     @Override
     public void reloadVpn(String country) {
+        clearInfoRow();
+        viewVPN.stopIndicator();
+        viewVPN.startLoader();
         countryStart = country;
         managerVpn.stopVPN((answer) -> {
             viewVPN.showToastVpnStop();
-            if (answer) managerVpn.startWithCountries(country, this::checkStartResult);
+            managerVpn.startWithCountries(country, this::checkStartResult);
         });
     }
 
+    @Override
+    public boolean isVpnIsStart() {
+        return vpnIsStart;
+    }
+
+    @Override
+    public void stopVpn() {
+        viewVPN.changeTextOnButtonStart("START");
+        viewVPN.showToastVpnStop();
+        viewVPN.stopIndicator();
+        clearInfoRow();
+        vpnIsStart = false;
+        managerVpn.stopVPN((result) -> showStopTraffic());
+    }
+
     private void checkStartResult(String startResult) {
-        viewVPN.outInfo(startResult);
-        if (startResult.equals(ManagerVPN.VPN_CONNECTED))
+        viewVPN.outInfo(startResult, true);
+        if (startResult.equals(ManagerVPN.VPN_CONNECTED)){
             viewVPN.showTargetLocation(countryStart);
-        else
+            viewVPN.startIndicator();
+            viewVPN.changeTextOnButtonStart("STOP");
+            showTraffic();
+            vpnIsStart = true;
+        } else{
+            viewVPN.stopLoader();
             viewVPN.showTargetLocation("error");
+            viewVPN.changeTextOnButtonStart("START");
+            showStopTraffic();
+            vpnIsStart = false;
+        }
+    }
+
+    private void clearInfoRow() {
+        viewVPN.showTargetLocation("");
+        viewVPN.outInfo("", false);
+    }
+
+    private void showTraffic() {
+        managerVpn.vpnTraffic(((tx, rx) -> {
+            if (vpnIsStart) viewVPN.showTraffic(tx, rx);
+        }));
+    }
+
+    private void showStopTraffic() {
+        managerVpn.stopTraffic(((l, l1) -> viewVPN.showTrafficAfterRemove(l, l1)));
     }
 }

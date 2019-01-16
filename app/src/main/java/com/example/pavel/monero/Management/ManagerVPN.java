@@ -9,6 +9,7 @@ import com.anchorfree.hydrasdk.api.data.ServerCredentials;
 import com.anchorfree.hydrasdk.api.response.User;
 import com.anchorfree.hydrasdk.callbacks.Callback;
 import com.anchorfree.hydrasdk.callbacks.CompletableCallback;
+import com.anchorfree.hydrasdk.callbacks.TrafficListener;
 import com.anchorfree.hydrasdk.exceptions.HydraException;
 import com.anchorfree.reporting.TrackingConstants;
 import java.util.List;
@@ -77,11 +78,21 @@ public class ManagerVPN implements IManagementVPN {
         });
     }
 
+    @Override
+    public void vpnTraffic(CallbackTraffic callbackTraffic) {
+        HydraSdk.addTrafficListener(callbackTraffic::getTraffic);
+    }
+
+    public void stopTraffic(CallbackRemoveTraffic callbackRemoveTraffic) {
+        HydraSdk.removeTrafficListener(callbackRemoveTraffic::removeResult);
+    }
+
     private void startVpnWithSettings(String country, CallbackStartResult callback) {
         HydraSdk.startVPN(new SessionConfig.Builder()
                 .withVirtualLocation(country)
                 .withReason(TrackingConstants.GprReasons.M_UI)
                 .build(), new Callback<ServerCredentials>() {
+
             @Override
             public void success(@NonNull ServerCredentials serverCredentials) {
                 callback.getStartResult(VPN_CONNECTED);

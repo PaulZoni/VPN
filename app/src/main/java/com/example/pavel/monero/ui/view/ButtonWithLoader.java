@@ -8,7 +8,9 @@ import android.widget.FrameLayout;
 
 import com.example.pavel.monero.R;
 
-public class ButtonWithLoader  extends FrameLayout{
+public class ButtonWithLoader  extends FrameLayout {
+
+
 
     public ButtonWithLoader(@NonNull Context context) {
         super(context);

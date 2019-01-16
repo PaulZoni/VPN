@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.anchorfree.hydrasdk.api.data.Country;
 import com.example.pavel.monero.Management.ManagerFile;
@@ -19,7 +22,9 @@ public class ListCountriesActivity extends AppCompatActivity implements IViewCou
         AdapterListCountries.ClickOnCountry {
 
     @BindView(R.id.recycler_view_countries) RecyclerView recyclerViewCountries;
-    private                     IPresenterListCountries presenterListCountries;
+    @BindView(R.id.list_progress_bar)                  ProgressBar progressBar;
+    @BindView(R.id.button_back)                        ImageButton button_back;
+    private IPresenterListCountries                     presenterListCountries;
 
     public static Intent START(Context context) {
         return new Intent(context, ListCountriesActivity.class);
@@ -30,6 +35,8 @@ public class ListCountriesActivity extends AppCompatActivity implements IViewCou
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_countries);
         ButterKnife.bind(this);
+        startIndicator();
+        listenerBack();
         presenterListCountries = new ListCountriesPresenter();
         presenterListCountries.addView(this);
         presenterListCountries.getCountries();
@@ -37,6 +44,7 @@ public class ListCountriesActivity extends AppCompatActivity implements IViewCou
 
     @Override
     public void showListCountries(List<Country> countryList) {
+        stopIndicator();
         AdapterListCountries adapterListCountries;
         adapterListCountries = new AdapterListCountries(countryList, new ManagerFile(this));
         adapterListCountries.addCallback(this);
@@ -55,5 +63,19 @@ public class ListCountriesActivity extends AppCompatActivity implements IViewCou
         Intent intent = new Intent();
         intent.putExtra("Countries", countryName);
         setResult(RESULT_OK, intent);
+    }
+
+    @Override
+    public void startIndicator() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void stopIndicator() {
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void listenerBack() {
+        button_back.setOnClickListener((view) -> finish());
     }
 }
