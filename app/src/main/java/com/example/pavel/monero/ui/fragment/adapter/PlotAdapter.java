@@ -1,7 +1,6 @@
 package com.example.pavel.monero.ui.fragment.adapter;
 
 import com.robinhood.spark.SparkAdapter;
-
 import java.util.ArrayList;
 
 public class PlotAdapter extends SparkAdapter {

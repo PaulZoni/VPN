@@ -1,8 +1,10 @@
 package com.example.pavel.monero.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.pavel.monero.App;
 import com.example.pavel.monero.Management.ManagerFile;
 import com.example.pavel.monero.R;
 import com.example.pavel.monero.ui.InterfaceVPN;
@@ -20,29 +23,28 @@ import com.example.pavel.monero.ui.countries.ListCountriesActivity;
 import com.example.pavel.monero.ui.fragment.adapter.PlotAdapter;
 import com.example.pavel.monero.ui.view.CustomIndicator;
 import com.robinhood.spark.SparkView;
-
-import java.util.ArrayList;
-
+import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainFragment extends Fragment implements ViewVPN {
 
-    @BindView(R.id.info)                            TextView out;
+    @BindView(R.id.info)                     TextView out;
     @BindView(R.id.button_start)             Button button_start;
-    @BindView(R.id.LoginIs)              TextView messageLoginIs;
-    @BindView(R.id.login)                     Button loginButton;
-    @BindView(R.id.country_button)     ImageButton countryButton;
-    @BindView(R.id.country_connect)      TextView countryConnect;
-    @BindView(R.id.location)             TextView targetLocation;
-    @BindView(R.id.indicatorView)      CustomIndicator indicator;
-    @BindView(R.id.bytes_transferred) TextView bytes_transferred;
-    @BindView(R.id.bytes_received)       TextView bytes_received;
-    @BindView(R.id.spark_view) SparkView               sparkView;
-    private InterfaceVPN<ViewVPN>                            vpn;
-    private final int                            requestCode = 1;
-    private View                                            view;
-    private PlotAdapter                              plotAdapter;
+    @BindView(R.id.LoginIs)                  TextView messageLoginIs;
+    @BindView(R.id.login)                    Button loginButton;
+    @BindView(R.id.country_button)           ImageButton countryButton;
+    @BindView(R.id.country_connect)          TextView countryConnect;
+    @BindView(R.id.location)                 TextView targetLocation;
+    @BindView(R.id.indicatorView)            CustomIndicator indicator;
+    @BindView(R.id.bytes_transferred)        TextView bytes_transferred;
+    @BindView(R.id.bytes_received)           TextView bytes_received;
+    @BindView(R.id.spark_view)               SparkView sparkView;
+    private InterfaceVPN<ViewVPN>            vpn;
+    private final int                        requestCode = 1;
+    private View                             view;
+    @Inject PlotAdapter                      plotAdapter;
+    @Inject ManagerFile                      managerFile;
 
     public MainFragment() {
         // Required empty public constructor
@@ -54,12 +56,18 @@ public class MainFragment extends Fragment implements ViewVPN {
         view = inflater.inflate(R.layout.fragment_main, container, false);
 
         ButterKnife.bind(this, view);
-        vpn = new PresenterVPN(new ManagerFile(getContext()));
+        vpn = new PresenterVPN(managerFile);
         vpn.addView(this);
         initialListener();
         startWithCountry();
         addAdapterToPlot();
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        ((App) (context.getApplicationContext())).getAppComponent().inject(this);
+        super.onAttach(context);
     }
 
     @Override
@@ -169,8 +177,6 @@ public class MainFragment extends Fragment implements ViewVPN {
     }
 
     private void addAdapterToPlot() {
-        ArrayList<Long> arrayList = new ArrayList<>();
-        plotAdapter = new PlotAdapter(arrayList);
         sparkView.setAdapter(plotAdapter);
     }
 }

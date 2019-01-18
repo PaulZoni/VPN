@@ -21,10 +21,10 @@ import butterknife.ButterKnife;
 public class ListCountriesActivity extends AppCompatActivity implements IViewCountries,
         AdapterListCountries.ClickOnCountry {
 
-    @BindView(R.id.recycler_view_countries) RecyclerView recyclerViewCountries;
-    @BindView(R.id.list_progress_bar)                  ProgressBar progressBar;
-    @BindView(R.id.button_back)                        ImageButton button_back;
-    private IPresenterListCountries                     presenterListCountries;
+    @BindView(R.id.recycler_view_countries)     RecyclerView recyclerViewCountries;
+    @BindView(R.id.list_progress_bar)           ProgressBar progressBar;
+    @BindView(R.id.button_back)                 ImageButton button_back;
+    private IPresenterListCountries             presenterListCountries;
 
     public static Intent START(Context context) {
         return new Intent(context, ListCountriesActivity.class);
